@@ -5,7 +5,7 @@ import requests
 
 access = "mGtkK4oHuRzC87HhFq8DYXgZr5HgGzkbHrNJdO36"
 secret = "j4DprBWHAeLxqfQ33Y4ivhSOoAWBBJAdSqKCrtRa"
-myToken = "xoxb-1997441711206-2001145216773-n0KfXR24w0ZSljVieijShsTp"
+myToken = "xoxb-1997441711206-2001145216773-hdyQvn1DSL6P8Bhlnir4N5ef"
 
 def post_message(token, channel, text):
     """슬랙 메시지 전송"""
@@ -50,7 +50,7 @@ def get_current_price(ticker):
 upbit = pyupbit.Upbit(access, secret)
 print("autotrade start")
 # 시작 메세지 슬랙 전송
-post_message(myToken,"#일반", "자동구매 시작")
+post_message(myToken,"#-ai", "start")
 
 while True:
     try:
@@ -66,14 +66,14 @@ while True:
                 krw = get_balance("KRW") 
                 if krw > 5000:
                     buy_result = upbit.buy_market_order("KRW-ETH", krw*0.9995) # 비트코인을 매수한다. 이때 수수료 0.05 % 를 고려한다.
-                    post_message(myToken,"#일반", "ETH buy : " +str(buy_result))
+                    post_message(myToken,"#-ai", "ETH buy : " +str(buy_result))
         else: # 10초전일떄는
             ETH = get_balance("ETH")
             if ETH > 0.00008:
                 sell_result = upbit.sell_market_order("KRW-ETH", ETH*0.9995)
-                post_message(myToken,"#일반", "ETH buy : " +str(sell_result))
+                post_message(myToken,"#-ai", "ETH buy : " +str(sell_result))
         time.sleep(1)
     except Exception as e:
         print(e)
-        post_message(myToken,"#일반", e)
+        post_message(myToken,"#-ai", e)
         time.sleep(1)
