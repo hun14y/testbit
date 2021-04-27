@@ -50,28 +50,28 @@ def get_current_price(ticker):
 upbit = pyupbit.Upbit(access, secret)
 print("autotrade start")
 # 시작 메세지 슬랙 전송
-post_message(myToken,"#일반", "비트코인 자동구매 시작")
+post_message(myToken,"#일반", "자동구매 시작")
 
 while True:
     try:
         now = datetime.datetime.now() # 현재시간
-        start_time = get_start_time("KRW-BTC") # 시작시간 
+        start_time = get_start_time("KRW-ETH") # 시작시간 
         end_time = start_time + datetime.timedelta(days=1) # 끝나는 시간. ( 다음날 9 시)
 
         if start_time < now < end_time - datetime.timedelta(seconds=10): # 8시 59분 50초까지 돌아가게한다. // # 9시 < 현재 < 8시 59 : 50
-            target_price = get_target_price("KRW-BTC", 0.5) # 변동성 돌파전략으로 목표가를 정하고
-            ma15 = get_ma15("KRW-BTC")
-            current_price = get_current_price("KRW-BTC") # 현재 가격 조회
+            target_price = get_target_price("KRW-ETH", 0.5) # 변동성 돌파전략으로 목표가를 정하고
+            ma15 = get_ma15("KRW-ETH")
+            current_price = get_current_price("KRW-ETH") # 현재 가격 조회
             if target_price < current_price and ma15 < current_price: # 이동 평균선도 확인한다.
                 krw = get_balance("KRW") 
                 if krw > 5000:
-                    buy_result = upbit.buy_market_order("KRW-BTC", krw*0.9995) # 비트코인을 매수한다. 이때 수수료 0.05 % 를 고려한다.
-                    post_message(myToken,"#일반", "BTC buy : " +str(buy_result))
+                    buy_result = upbit.buy_market_order("KRW-ETH", krw*0.9995) # 비트코인을 매수한다. 이때 수수료 0.05 % 를 고려한다.
+                    post_message(myToken,"#일반", "ETH buy : " +str(buy_result))
         else: # 10초전일떄는
-            btc = get_balance("BTC")
-            if btc > 0.00008:
-                sell_result = upbit.sell_market_order("KRW-BTC", btc*0.9995)
-                post_message(myToken,"#일반", "BTC buy : " +str(sell_result))
+            ETH = get_balance("ETH")
+            if ETH > 0.00008:
+                sell_result = upbit.sell_market_order("KRW-ETH", ETH*0.9995)
+                post_message(myToken,"#일반", "ETH buy : " +str(sell_result))
         time.sleep(1)
     except Exception as e:
         print(e)
